@@ -1,89 +1,120 @@
+# Movies API
 
-# Aplicação de Gerenciamento de Filmes
+Este projeto é uma API para gerenciar filmes, onde é possível criar, listar, atualizar e deletar filmes. A API foi desenvolvida utilizando **Node.js**, **TypeScript** e **MongoDB**.
 
-## Descrição
+## Funcionalidades
 
-Esta aplicação foi desenvolvida para gerenciar filmes, permitindo que os usuários criem, listem, recuperem por ID, alterem por ID e excluam filmes por ID. Ela segue os princípios da Clean Architecture, separando a lógica de aplicação, domínio, infraestrutura e interfaces.
+- **Criar Filme:** Permite adicionar um novo filme à base de dados.
+- **Listar Filmes:** Retorna todos os filmes cadastrados.
+- **Listar Filme por ID:** Retorna um filme específico baseado no ID.
+- **Atualizar Filme:** Permite atualizar os dados de um filme existente.
+- **Deletar Filme:** Permite remover um filme da base de dados.
 
-## Índice
+## Tecnologias Utilizadas
 
-- [Casos Uso](#uso)
-- [Casos de Uso Disponíveis](#casos-de-uso-disponíveis)
-- [Explicação do Uso](#Explicação-do-Uso)
-- [Estrutura do Projeto](#estrutura-do-projeto)
+- **Node.js**
+- **Express**
+- **TypeScript**
+- **MongoDB** com Mongoose
+- **Insomnia** (para testar a API)
 
-## Casos Uso
+## Endpoints
 
-- **`criarFilme`**
-- **`listarTodosFilmes`**
-- **`buscarFilmePorId`**
-- **`atualizarFilmePorId`**
-- **`deletarFilme`**
+### Criar Filme
 
-## Casos de Uso Disponíveis
+- **POST** `/movies`
+- Exemplo de corpo da requisição:
 
-- **CreateMovieUseCase**: Responsável por criar novos registros de filmes.
-- **ListAllMoviesUseCase**: Responsável por listar todos os filmes do repositório.
-- **ListMovieByIdUseCase**: Responsável por buscar um filme específico pelo ID.
-- **UpdateMovieByIdUseCase**: Responsável por atualizar e um filme específico pelo ID.
-- **DeleteMovieUseCase**: Responsável por deletar um filme do repositório.
+  ```json
+  {
+    "title": "Filme Exemplo",
+    "summary": "Resumo do filme",
+    "origin": "Origem do filme",
+    "image": "URL da imagem do filme"
+  }
 
+### Listar Todos os Filmes
 
-## Explicação do Uso:
+- **GET** `/movies`
 
-- **`criarFilme`**: Usa o controlador para criar um novo filme, enviando os dados do filme como um objeto.
-- **`listarTodosFilmes`**: Faz uma chamada para o controlador para listar todos os filmes disponíveis.
-- **`buscarFilmePorId`**: Busca detalhes de um filme específico pelo seu ID.
-- **`atualizarFilmePorId`**: Busca um filme específico e faz atualização/alteração pelo seu ID.
-- **`deletarFilme`**: Deleta um filme específico pelo ID fornecido.
+### Listar Filme por ID
+
+- **GET** `/movies/:id`
+
+### Atualizar Filme
+
+- **PUT** `/movies/:id`
+- Exemplo de corpo da requisição:
+
+  ```json
+  {
+    "title": "Novo Título",
+    "summary": "Novo Resumo",
+    "origin": "Nova Origem",
+    "image": "Nova URL da Imagem"
+  }
+
+### Deletar Filme
+
+- **DELETE** `/movies/:id`
+
+## Prints do MongoDB
+
+### POST
+![alt text](<MoviesPrints/MongoDB - POST.png>)
+
+### GET
+![alt text](<MoviesPrints/MongoDB - GET.png>)
+
+### UPDATE-ANTES
+![alt text](MoviesPrints/MongoDB-Update-ANTES.png)
+
+### UPDATE-DEPOIS
+![alt text](MoviesPrints/MongoDB-Update-DEPOIS.png)
+
+### DELETE
+![alt text](<MoviesPrints/MongoDB - DELETE.png>)
+
 
 ## Estrutura do Projeto
 
-O projeto é estruturado seguindo os princípios da Clean Architecture, com a separação de responsabilidades e tornando mais escalável. Abaixo está uma visão geral da estrutura de pastas:
+O projeto é estruturado seguindo os princípios da **Clean Architecture**, com a separação de responsabilidades, tornando-o mais escalável e fácil de manter. Abaixo está uma visão geral da estrutura de pastas:
+
+
 
 ```
 src/
-├── application/                        # Camada de lógica de aplicação (Casos de Uso)
+├── application/                        
 │   ├── repositories/
-│   │   └── book-repository.ts           # Interface que define os métodos do repositório
-│   │   └── id-generator-interface.ts    # Interface que define o gerador de ID
-│   └── use-cases/
-│       ├── create-movie-use-case.ts     # Caso de uso para criar um filme
-│       ├── list-all-movies-use-case.ts  # Caso de uso para listar todos os filmes
-│       ├── list-movie-by-id-use-case.ts # Caso de uso para listar um filme por ID
-│       └── delete-movie-use-case.ts     # Caso de uso para excluir um filme
+│   │   └── movie-repository.ts           
+│   │── use-cases/
+│       ├── create-movie-use-case.ts     
+│       │── delete-movie-use-case
+│       ├── list-all-movies-use-case.ts  
+│       ├── list-movie-by-id-use-case.ts 
+│       └── update-movie-use-case.ts     
 │
-├── domain/                             # Camada de domínio (Modelos de Domínio)
-│   └── movie.ts                        # Definição da entidade Filme
+├── domain/                            
+│   └── movie.ts                        
 │
-├── infrastructure/                     # Camada de infraestrutura (Banco de Dados, Utilitários)
+├── infrastructure/           
 │   ├── database/
-│   │   └── repository.ts               # Implementação do repositório de filmes
-│   └── utils/
-│       └── config.ts                   # Configuração de dependências
-│       └── id-generator.ts             # Implementação do gerador de ID
+│   ├── mongo-db
+│       └── connection.ts
+│       └── model.ts 
+│       └── repository.ts               
+│   │── utils/
+│       └── config.ts                   
+│       └── id-generator.ts             
 │
-├── interface/                          # Camada de interfaces (Controladores, Requisições HTTP)
-│   └── movie-controller.ts             # Controlador que lida com requisições HTTP para filmes
-│   └── index.ts                        # Ponto de entrada para os controladores
-```
+├── interface/                  
+│   └── index.ts
+│   └── movie-controller.ts     
 
-## Prints do Insomnia
 
-### POST
-![alt text](POST.png)
+Essa estrutura facilita o entendimento das responsabilidades de cada camada e módulo dentro do projeto.
 
-### GET
-![alt text](GET.png)
+---
 
-### GET-ID
-![alt text](GET-ID.png)
+Se precisar de mais ajustes ou quiser incluir mais detalhes sobre algum dos diretórios, é só me avisar!
 
-### GET-ID-SUCESSO
-![alt text](GET-ID-SUCESSO.png)
-
-### PUT
-![alt text](PUT.png)
-
-### DELETE
-![alt text](DELETE.png)
